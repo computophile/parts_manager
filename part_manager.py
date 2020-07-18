@@ -17,20 +17,52 @@ def populate_list():
 def add_item():
     if part_text.get() == '' or customer_text.get() == '' or retailer_text.get() == '' or price_text.get() == '':
         messagebox.showerror("Required Fields", "Please include all fields")
+        return
     db.insert(part_text.get(), customer_text.get(), retailer_text.get(), price_text.get())
     parts_list.delete(0, tk.END)
     parts_list.insert(tk.END, (part_text.get(), customer_text.get(), retailer_text.get(), price_text.get()))
+    clear_text()
     populate_list()
 
+def select_item(event):
+    global selected_item
+
+    print("Item selected")
+
+    index = parts_list.curselection()[0]
+    selected_item = parts_list.get(index)
+
+    part_entry.delete(0, tk.END)
+    part_entry.insert(tk.END, selected_item[1])
+
+    customer_entry.delete(0, tk.END)
+    customer_entry.insert(tk.END, selected_item[2])
+
+    retailer_entry.delete(0, tk.END)
+    retailer_entry.insert(tk.END, selected_item[3])
+
+    price_entry.delete(0, tk.END)
+    price_entry.insert(tk.END, selected_item[4])
+
+
 def remove_item():
-    print("remove")
+    print(selected_item[0])
+    db.remove(selected_item[0])
+    populate_list()
+    clear_text()
 
 def update_item():
     print("update")
+    db.update(selected_item[0], part_text.get(), customer_text.get(), retailer_text.get(), price_text.get())
+    populate_list()
+    clear_text()
 
-def clear_item():
-    print("clear")
 
+def clear_text():
+    part_entry.delete(0, tk.END)
+    customer_entry.delete(0, tk.END)
+    retailer_entry.delete(0, tk.END)
+    price_entry.delete(0, tk.END)
 
 
 # create window object
@@ -80,6 +112,8 @@ scrollbar.grid(row=3, column=3)
 parts_list.configure(yscrollcommand=scrollbar.set)
 scrollbar.configure(command=parts_list.yview)
 
+# bind select
+parts_list.bind('<<ListboxSelect>>',  select_item)
 
 # buttons
 # 4 different button add, remove, update, clear
@@ -98,7 +132,7 @@ update_btn = tk.Button(app, text="Update Part", width=12, command=update_item)
 update_btn.grid(row = 2, column = 2, pady= 20)
 
 # clear button
-clear_btn = tk.Button(app, text="Clear Part", width=12, command=clear_item)
+clear_btn = tk.Button(app, text="Clear Input", width=12, command=clear_text)
 clear_btn.grid(row = 2, column = 3, pady= 20)
 
 # window details
