@@ -149,3 +149,5 @@ populate_list()
 
 # start program
 app.mainloop()
+
+# credits to traverse media
