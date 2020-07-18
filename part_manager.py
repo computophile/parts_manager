@@ -26,23 +26,26 @@ def add_item():
 
 def select_item(event):
     global selected_item
+    try:
+        print("Item selected")
 
-    print("Item selected")
+        index = parts_list.curselection()[0]
+        selected_item = parts_list.get(index)
 
-    index = parts_list.curselection()[0]
-    selected_item = parts_list.get(index)
+        part_entry.delete(0, tk.END)
+        part_entry.insert(tk.END, selected_item[1])
 
-    part_entry.delete(0, tk.END)
-    part_entry.insert(tk.END, selected_item[1])
+        customer_entry.delete(0, tk.END)
+        customer_entry.insert(tk.END, selected_item[2])
 
-    customer_entry.delete(0, tk.END)
-    customer_entry.insert(tk.END, selected_item[2])
+        retailer_entry.delete(0, tk.END)
+        retailer_entry.insert(tk.END, selected_item[3])
 
-    retailer_entry.delete(0, tk.END)
-    retailer_entry.insert(tk.END, selected_item[3])
+        price_entry.delete(0, tk.END)
+        price_entry.insert(tk.END, selected_item[4])
 
-    price_entry.delete(0, tk.END)
-    price_entry.insert(tk.END, selected_item[4])
+    except IndexError:
+        pass
 
 
 def remove_item():
