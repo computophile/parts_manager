@@ -1,13 +1,26 @@
 import tkinter as tk
+from tkinter import messagebox
 import tkinter.font as tkFont
+from db import Database
 
+db = Database('store.db')
 
 # fetching the data
+
 def populate_list():
-    print("Populate")
+    parts_list.delete(0, tk.END)
+    print('list deleted')
+    for row in db.fetch():
+        print(row)
+        parts_list.insert(tk.END, row)
 
 def add_item():
-    print("Add")
+    if part_text.get() == '' or customer_text.get() == '' or retailer_text.get() == '' or price_text.get() == '':
+        messagebox.showerror("Required Fields", "Please include all fields")
+    db.insert(part_text.get(), customer_text.get(), retailer_text.get(), price_text.get())
+    parts_list.delete(0, tk.END)
+    parts_list.insert(tk.END, (part_text.get(), customer_text.get(), retailer_text.get(), price_text.get()))
+    populate_list()
 
 def remove_item():
     print("remove")
@@ -17,7 +30,6 @@ def update_item():
 
 def clear_item():
     print("clear")
-
 
 
 
